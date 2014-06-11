@@ -26,24 +26,19 @@ logging.basicConfig(
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'authentication',
-        'USER': 'traceall',
-        'PASSWORD': 'systraceall',
-        'HOST': '192.168.16.223',
-        'PORT': '3306',
-        'DATABASE_CHARSET': 'UTF8',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'django-privilege'
     }
-}
 
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': [
-            "127.0.0.1:11211",
-        ]
-    }
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'Your DB name',
+#        'USER': 'Your DB account',
+#        'PASSWORD': 'Your password',
+#        'HOST': 'Your DB host',
+#        'PORT': 'Your DB port',
+#        'DATABASE_CHARSET': 'UTF8',
+#    }
 }
 
 
