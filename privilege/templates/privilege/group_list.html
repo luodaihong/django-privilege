@@ -1,0 +1,128 @@
+{% extends "privilege/privilege_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load pagination %}
+{% load user_group %}
+
+
+{% block search %}
+<div class="row" style="text-align: right;padding-right: 15px;">
+	<div style="height: 40px;margin-bottom: 15px;vertical-align: bottom;display:inline-table;">
+		<form class="form-inline pull-right" role="form" method="post" action="{% url privilege.views.user.search 1 %}">
+		 	<div class="input-group" >
+      			<input value="{{ keyword }}" type="text" class="form-control" placeholder="{% trans 'enter group name' %}"
+      				name="keyword" id="keyword" maxlength=15
+      				data-content="{% trans 'Can not input empty!' %}" data-placement="top" data-toggle="popover" data-container="body">
+   				<span class="input-group-btn">
+     				<button class="btn btn-default" style="border-radius:0px 4px 4px 0px;" type="submit"
+     					onclick="return privilegeGlobal.checkBlank('keyword');">
+     					<span class="glyphicon glyphicon-search"></span> {% trans "Search" %}
+     				</button>
+     				
+     				<a class="btn btn-default" href="{% url privilege.views.group.add_group %}" style="margin-left: 15px;">
+	      				<span class="glyphicon glyphicon-plus"></span> {% trans "Add group" %}
+			  		</a>
+   				</span>
+      			
+    		</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block privilege_content %}
+
+{% if not page.object_list %}
+	{% include "privilege/search_nothing.html" with user=request.user %}
+{% endif %}
+
+<div class="panel-group" id="accordion">
+
+	{% for group in page.object_list %}
+	<div class="panel panel-default">
+		<div class="panel-heading" >
+			<div class="row">
+				<div class="col-md-8 col-lg-8" data-toggle="collapse" data-parent="#accordion" href="#{{group.id}}group">
+					<a href="{% url privilege.views.group.group_detail group.id 1 %}" onclick="group_list_util.jump(this,event);">{{group.name}}</a>
+				</div>
+	
+				<div class="col-md-4 col-lg-4" style="text-align: right;">
+					<a class="btn btn-warning btn-xs" href="{% url privilege.views.group.delete_group group.id %}">
+						<span class="glyphicon glyphicon-remove"></span> {% trans "remove" %}
+					</a>
+					<a class="btn btn-primary btn-xs" href="{% url privilege.views.group.edit_group group.id %}">
+						 <span class="glyphicon glyphicon-pencil"></span> {% trans "rename" %}
+					</a>
+				</div>
+			</div>
+		</div>
+		
+		<div id="{{group.id}}group" class="panel-collapse collapse in" name="grouphead">
+		
+			<div class="panel-body">
+				<div class="col-md-7 col-lg-7">
+					<h4>{% trans "permissions of this group" %}</h4>
+					{% with group_permissions=group.permissions.all %}
+					{% for permission in permissions %}
+						{% if permission in group_permissions %}
+						<div class="col-md-6">
+							<input type="checkbox" name="permission" value="{{ permission.id }}" checked="checked"
+								onclick="privilegeGlobal.changeGroupPermission(this, '{{group.id}}', '{{ permission.id }}',
+									'{% url privilege.views.group.change_group_permission %}')">
+							<font title="{{ permission.name }}" id="{{group.id}}{{ permission.id }}" color="green">
+								{{ permission.codename }}
+							</font>
+				    	</div>
+						{% else %}
+						<div class="col-md-6">
+							<input type="checkbox" name="permission" value="{{ permission.id }}"
+								onclick="privilegeGlobal.changeGroupPermission(this, '{{group.id}}', '{{ permission.id }}',
+									'{% url privilege.views.group.change_group_permission %}')">
+							<font title="{{ permission.name }}" id="{{group.id}}{{ permission.id }}">
+								{{ permission.codename }}
+							</font>
+						</div>
+						{% endif %}
+				    {% endfor %}
+				    {% endwith %}
+			    </div>
+			    <div class="col-md-5 col-lg-5">
+			    	<h4>{% trans "users of this group" %}</h4>
+			    	{% user_group group 10 %}
+			    </div>
+			</div>
+	
+		</div><!-- end panel-collapse -->
+			
+	</div>
+	{% endfor %}
+</div>
+
+
+<script>
+var grouphead = document.getElementsByName("grouphead")[0];
+if (grouphead) {
+	grouphead.setAttribute("class", "panel-collapse collapse");
+}
+$(".collapse").collapse();
+
+
+var group_list_util = new Object();
+group_list_util.jump = function (aTagObj, event) {
+	event.stopPropagation();
+	window.location.href = aTagObj.href;
+}
+</script>
+
+
+<div class="row" style="text-align: right;padding-right: 15px;">
+	{% pagination page url_prefix request %}
+</div>
+
+{% endblock %}
+
+
+{% block privilege_extra_js %}
+<script type="text/javascript" src="{% static 'js/privilege/privilege.js' %}"></script>
+{% endblock %}

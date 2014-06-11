@@ -1,0 +1,37 @@
+{% load i18n %}
+
+{% if not users %}
+	<p class="text-warning">{% trans "This group has no users." %}</p>
+{% else %}
+	{% for user in users %}
+	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="usergroup{{user.id}}{{group.id}}">
+		<span class="text-success" title="{{ user.username }}">
+			{{ user.username|truncatechars:8}}
+		</span>
+		<button type="button" class="close" style="float: none;vertical-align: bottom;"
+			onclick="new_user_tag.removeFromGroup('{{user.id}}', '{{group.id}}')">&times;</button>
+	</div>
+	{% endfor %}
+
+	<script type="text/javascript">
+		var new_user_tag = new Object();
+		new_user_tag.removeFromGroup = function (userid, groupid) {
+			var data = {"user_id": userid, "param_id": groupid, "op_code": "delete", "param_type": "group"};
+			$.ajax({
+				type: "POST",
+				url: "{% url privilege.views.user.change_user_permission %}",
+				async: true,
+				data: data,
+				success: function(response) {
+					if (response.status == "ok") {
+						var parentObj = document.getElementById("usergroup" + userid + groupid);
+						parentObj.style.display = "none";
+					} else {
+						alert(response.msg);
+					}
+				},
+			});
+		}
+	</script>
+
+{% endif %}

@@ -1,0 +1,74 @@
+{% extends "privilege/privilege_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load pagination %}
+
+
+{% block privilege_content %}
+<form role="form" method="POST" id="form" action="{% url privilege.views.permission.delete_permissions %}">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-7 col-lg-7">
+					{% trans "All permissions" %}：
+				</div>
+				<div class="col-md-5 col-lg-5"
+					style="text-align: right;">
+					<button class="btn btn-warning btn-xs" type="submit" onclick="return permission_util.checkSelected();" id="submitButton"
+					data-content="{% trans 'You have choosen nothing.' %}" data-placement="top" data-toggle="popover" data-container="body">
+						<span class="glyphicon glyphicon-remove"></span> {% trans "remove" %}
+					</button>
+					<a class="btn btn-primary btn-xs" href="{% url privilege.views.permission.add_permission %}">
+						<span class="glyphicon glyphicon-plus"></span> {% trans "add" %}
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-body">
+			<div class="row">
+				{% for permission in permissions %}
+				<div class="col-md-4 col-lg-4">
+					<input type="checkbox" name="permission" value="{{ permission.id }}"
+						onclick="permission_util.changeColor(this, '{{group.id}}{{ permission.id }}')">
+					<a href="{% url privilege.views.permission.change_permission permission.id %}">
+						<font color="#333333" title="{{ permission.name }}" id="{{group.id}}{{ permission.id }}">
+							{{ permission.name|truncatechars:8 }}
+						</font>
+					</a>
+					<span class="text-muted">{{ permission.codename }}</span>
+				</div>
+		    	{% endfor %}
+		    </div>
+		</div>
+
+	</div>
+</form>
+
+<script>
+var permission_util = new Object();
+
+permission_util.changeColor = function (clickedObj, id) {
+	var domObj = document.getElementById(id);
+	if (clickedObj.checked) {
+		domObj.color = "green";
+	} else {
+		domObj.color = "#333333";
+	}
+}
+
+permission_util.checkSelected = function () {
+	var checkBoxes = document.getElementsByName("permission");
+	for (var i=0; i<checkBoxes.length; i++) {
+		if (checkBoxes[i].checked) {
+			return true;
+		}
+	}
+
+	$("#submitButton").popover('show');
+	setTimeout("$('#submitButton').popover('destroy')", 2000);
+	return false;
+}
+</script>
+
+{% endblock %}

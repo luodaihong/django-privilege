@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">{% trans "Nothing" %}</h3>
+	</div>
+	<div class="panel-body">
+		<h3 style="margin-bottom: 20px;">
+			{{user}}
+			<small>, &nbsp;{% trans "Hello" %}!</small>
+			<small class="text-warning">{% trans "No matches are found." %}!</small>
+		</h3>
+	</div>
+</div>

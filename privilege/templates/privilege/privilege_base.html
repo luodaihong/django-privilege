@@ -1,0 +1,70 @@
+{% load static %}
+{% load breadcrumb %}
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+	    <meta charset="UTF-8">
+		<script type="text/javascript" src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
+	    <script type="text/javascript" src="{% static 'bootstrap3/js/bootstrap.min.js' %}"></script>
+	    <link rel="stylesheet" href="{% static 'bootstrap3/css/bootstrap.min.css' %}" />
+	    <title>{% block full_title %}{{ page_title }}_{{ settings.SITE_NAME }}_{{ settings.SLOGAN }}{% endblock %}</title>
+	</head>
+
+	<body>
+		<div class='container'>
+			<div class='row'>
+	    		{% block head %}
+		    	<nav class="navbar navbar-default" role="navigation">
+  					<div class="container-fluid">
+    					<div class="navbar-header">
+      						<a class="navbar-brand" href="{% url privilege.views.permission.permission_list %}">
+      							<span class="glyphicon glyphicon-home"></span> django-privilege
+      						</a>
+    					</div>
+
+    					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      						<ul class="nav navbar-nav navbar-right">
+        						<li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ request.user.username }}</a></li>
+        						<li><a href="{% url admin:logout %}"><span class="glyphicon glyphicon-log-out"></span></a></li>
+      						</ul>
+    					</div>
+  					</div>
+				</nav>
+	    		{% endblock %}
+			</div>
+			
+	       	<div class='row'>
+           		{% breadcrumb breadcrumb request %}
+
+			   	<div class='row' style="margin-top: 50px;">
+					<div class="col-md-2 col-lg-2">
+						{% vertical_nav CURRENT_MENU LEFT_MENUS %}
+					</div>
+					<div class="col-md-10 col-lg-10">
+						{% block search %}{% endblock %}
+	
+			         	{% block privilege_content %}{% endblock %}
+			       	</div>
+			    </div>
+			
+				{% block privilege_extra_js %}{% endblock %}
+	       	</div>
+	   		
+	   		<div class='row' style="position:fixed;bottom:0;top:auto;width: 87%;padding-bottom: 35px;">
+	   			{% block foot %}
+	   			<hr/ style="border-width: 3px 0 0;">
+	   			<div class="row" style="text-align: center;">
+	   				<ul class="list-inline muted">
+		   				<li>django-privilege V1.0 | </li>
+		   				<li>
+							<a href="https://github.com/luodaihong/django-privilege" target="_blank">contribute to us</a>
+						</li>
+		   			</ul>
+	   			</div>
+	   			{% endblock %}
+	   		</div>
+	    </div>
+	</body>
+</html>

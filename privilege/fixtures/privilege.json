@@ -1,0 +1,45 @@
+[
+	{"pk": 5,
+     "model": "auth.user",
+     "fields": {"email": "test@funshion.com",
+         	   "password": "pbkdf2_sha256$10000$UiNcXl268BBz$9q8pIHLnesVuhi/wTRuOuSpzyqDQvKPoHc6k6F4DyOo=",
+               "username": "test",
+               "is_active": 1,
+               "is_superuser": 0,
+               "date_joined": "2013-04-26 05:51:33"}
+	},
+	{"pk": 6,
+     "model": "auth.user",
+     "fields": {"email": "testt@funshion.com",
+         	   "password": "pbkdf2_sha256$10000$UiNcXl268BBz$9q8pIHLnesVuhi/wTRuOuSpzyqDQvKPoHc6k6F4DyOo=",
+               "username": "super",
+               "is_active": 1,
+               "is_superuser": 1,
+               "date_joined": "2013-04-26 05:51:33"}
+	},
+	
+	
+	{"pk": 1,
+     "model": "auth.group",
+     "fields": {"name": "group1"}
+	},
+	{"pk": 2,
+     "model": "auth.group",
+     "fields": {"name": "group2"}
+	},
+	
+	
+	{"pk": 1,
+     "model": "auth.user_groups",
+     "fields": {"user": 5, "group": 1}
+	},
+	{"pk": 2,
+     "model": "auth.user_groups",
+     "fields": {"user": 6, "group": 1}
+	},
+	
+	{"pk": 100,
+     "model": "auth.permission",
+     "fields": {"name": "ICan canadd changedelete group permissionand user ", "content_type": 1, "codename": "delete"}
+	}
+]

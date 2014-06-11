@@ -1,0 +1,163 @@
+{% load bootstrap %}
+
+
+<{% if field_container %}{{field_container}}{% else %}div{% endif %} class="{% if container_css %}{{container_css}}{% else %}form-group{% endif %} {% if field.errors %} has-error{% endif %}">
+    {% if field|is_checkbox %}
+
+        {% if field.auto_id %}
+        <label>
+            {{ field }}
+            <span><{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %}">
+            	{{ field.label }}
+            	</{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+            </span>
+            {% if field.help_text %}
+            <small>
+            	<span class="text-muted">{{ field.help_text|safe }}</span>
+            </small>
+        	{% endif %}
+        </label>
+        {% endif %}
+
+        {% for error in field.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+
+	{% elif field|is_multiple_checkbox %}
+		{% if field.auto_id %}
+			<span>
+				<{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %}">
+            	{{ field.label }}
+            	</{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+			</span>
+			{% if field.help_text %}
+            <small>
+            	<span class="text-muted">{{ field.help_text|safe }}</span>
+            </small>
+        	{% endif %}
+            <label>
+                {{ field }}
+            </label>
+		{% endif %}
+
+        {% for error in field.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+
+    {% elif field|is_radio %}
+        {% if field.auto_id %}
+        	<{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %} {{ classes.label }}">
+            	{{ field.label }}
+            </{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+            {% if field.help_text %}
+            <small>
+            	<span class="text-muted">{{ field.help_text|safe }}</span>
+            </small>
+        	{% endif %}
+        {% endif %}
+
+        {% for choice in field %}
+            <div class="radio">
+                <label>
+                    {{ choice.tag }}
+                    {{ choice.choice_label }}
+                </label>
+            </div>
+        {% endfor %}
+
+        {% for error in field.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+
+	{% elif field|is_datetime %}
+		<{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %}">
+            	{{ field.label }}
+        </{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+		{% if field.help_text %}
+            <small>
+            	<span class="text-muted">{{ field.help_text|safe }}</span>
+            </small>
+        {% endif %}
+
+        <div class="input-append date" id=datetimepicker_{{field.auto_id}} data-date-language="zh-CN" data-date-format="yyyy-mm-dd hh:ii:ss">
+        	{{field}}
+        	<span class="add-on"><i class="icon-th"></i></span>
+        </div>
+    {% elif field|is_date %}
+		<{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %}">
+            	{{ field.label }}
+        </{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+		{% if field.help_text %}
+            <small>
+            	<span class="text-muted">{{ field.help_text|safe }}</span>
+            </small>
+        {% endif %}
+
+        <div class="input-append date" id=datetimepicker_{{field.auto_id}} data-date-language="zh-CN" data-date-format="yyyy-mm-dd">
+        	{{field}}
+        	<span class="add-on"><i class="icon-th"></i></span>
+        </div>
+    {% elif field|is_time %}
+		<{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %}">
+            	{{ field.label }}
+        </{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+		{% if field.help_text %}
+            <small>
+            	<span class="text-muted">{{ field.help_text|safe }}</span>
+            </small>
+        {% endif %}
+
+        <div class="input-append date" id="datetimepicker_{{field.auto_id}}" data-date-language="zh-CN" data-date-format="hh:ii:ss">
+			{{field}}
+			<span class="add-on"><i class="icon-th"></i></span>
+		</div>
+
+    {% else %}
+        {% if field.auto_id %}
+	        <{% if label_container %}{{label_container}}{% else %}label{% endif %} class="{% if label_css %}{{label_css}}{% endif %} {{ classes.label }}" for="{{ field.auto_id }}">
+	            	{{ field.label }}
+	        </{% if label_container %}{{label_container}}{% else %}label{% endif %}>
+
+            {% if field.help_text %}
+            	<small><span class="text-muted">{{ field.help_text|safe }}</span></small>
+        	{% endif %}
+        {% endif %}
+
+        {{ field }}
+
+        {% for error in field.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+
+    {% endif %}
+</{% if field_container %}{{field_container}}{% else %}div{% endif %}>
+
+
+{% if field|is_datetime %}
+	<script>
+	$("#datetimepicker_{{field.auto_id}}").datetimepicker({
+		keyboardNavigation: true,
+		todayBtn: true,
+		todayHighlight: true,
+	}, "update");
+	</script>
+{%elif field|is_date %}
+	<script>
+	$("#datetimepicker_{{field.auto_id}}").datetimepicker({
+		keyboardNavigation: true,
+		todayBtn: true,
+		todayHighlight: true,
+		minView: 2,
+	}, "update");
+	</script>
+{%elif field|is_time %}
+	<script>
+	$("#datetimepicker_{{field.auto_id}}").datetimepicker({
+		keyboardNavigation: true,
+		todayBtn: true,
+		todayHighlight: true,
+		startView: 1
+	}, "update");
+	</script>
+{% endif %}
+

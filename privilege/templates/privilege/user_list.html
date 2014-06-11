@@ -1,0 +1,237 @@
+{% extends "privilege/privilege_base.html" %}
+{% load i18n %}
+{% load static %}
+{% load pagination %}
+
+
+{% block search %}
+<div class="row" style="text-align: right;padding-right: 15px;">
+	<div style="height: 40px;margin-bottom: 15px;vertical-align: bottom;display:inline-table;">
+		<form class="form-inline pull-right" role="form" method="post" action="{% url privilege.views.user.search 1 %}">
+			<div class="input-group">
+      			<input value="{{keyword}}" type="text" class="form-control" placeholder="{% trans 'enter user name' %}"
+      				name="keyword" id="keyword" maxlength=15
+      				data-content="{% trans 'Cannot input empty!' %}" data-placement="top" data-toggle="popover" data-container="body">
+   				<span class="input-group-btn">
+     				<button class="btn btn-default" style="border-radius:0px 4px 4px 0px;" type="submit"
+     					onclick="return privilegeGlobal.checkBlank('keyword');">
+     					<span class="glyphicon glyphicon-search"></span> {% trans 'Search' %}
+     				</button>
+     				
+     				<a class="btn btn-default" href="{% url privilege.views.user.add_user %}" style="margin-left: 15px;">
+	      				<span class="glyphicon glyphicon-plus"></span> {% trans 'Add user' %}
+		  			</a>
+   				</span>
+    		</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block privilege_content %}
+
+{% if not page.object_list %}
+	{% include "privilege/search_nothing.html" with user=request.user %}
+{% endif %}
+
+<div class="panel-group" id="accordion">
+
+{% for user in page.object_list %}
+<div class="panel panel-default">
+	<div class="panel-heading" >
+		<div class="row">
+			<div class="col-md-8 col-lg-8"
+				data-toggle="collapse" data-parent="#accordion" href="#{{user.id}}user">
+		    	<img alt="" src="/static/img/vip.png" title="{% trans 'Superuser' %}" id="superusericon{{ user.id }}"
+		    		{% if user.is_superuser %}
+		    		style="width:18px;height:18px;margin-right: 5px;"
+		    		{% else %}
+		    		style="width:18px;height:18px;margin-right: 5px;display:none;"
+		    		{% endif %}
+		    		/>
+		    	
+				<strong>{{user.username}}</strong>
+				{% if user.is_staff %}
+		    	<img alt="" src="/static/admin/img/icon-yes.gif" id="user_is_active{{user.id}}">
+		    	{% else %}
+		    	<img alt="" src="/static/admin/img/icon-no.gif" id="user_is_active{{user.id}}">
+		    	{% endif %}
+	    	</div>
+    	
+	    	<div class="col-md-4 col-lg-4" style="text-align: right;">
+	    		{% if user.id != request.user.id %}
+	    		<button class="btn btn-info btn-xs" type="button"
+		    		onclick="user_list_util.switch_super_user(this, '{{ user.id }}', '{% url privilege.views.user.switch_super_user user.id %}')">
+		    		<span class="glyphicon glyphicon-user"></span> {% if user.is_superuser %}UnRoot{% else %}Root{% endif %}
+		    	</button>
+		    	{% endif %}
+
+		    	
+		    	<button class="btn btn-warning btn-xs" type="button"
+		    		onclick="user_list_util.switch_active(this, '{{ user.id }}', '{% url privilege.views.user.switch_active_user user.id %}')">
+		    		{% if user.is_staff %}
+		    		<span class="glyphicon glyphicon-ban-circle"></span> {% trans 'Forbid' %}
+		    		{% else %}
+		    		<span class="glyphicon glyphicon-ok"></span> {% trans 'Activate' %}
+		    		{% endif %}
+		    	</button>
+
+		    	<a href="{% url privilege.views.user.reset_user_password user.id %}">
+		    		<button class="btn btn-primary btn-xs" type="button">
+		    			<span class="glyphicon glyphicon-refresh"></span> {% trans 'reset password' %}
+		    		</button>
+		    	</a>
+	    	</div>
+    	</div>
+	</div>
+	
+	<div id="{{user.id}}user" class="panel-collapse collapse in" name="userhead">
+	
+		<div class="panel-body">
+			<div class="col-md-7 col-lg-7">
+				<h4>{% trans 'Permissions' %}</h4>
+				{% with user_permissions=user.user_permissions.all %}
+				{% for permission in permissions %}
+					{% if permission in user_permissions %}
+					<div class="col-md-6">
+						<input type="checkbox" name="permission" value="{{ permission.id }}" checked="checked"
+							onclick="user_list_util.change_user_permission(this, '{{user.id}}', 'permission', '{{ permission.id }}')">
+						<font title="{{ permission.name }}" color="green" id="{{user.id}}permission{{ permission.id }}">{{ permission.codename }}</font>
+			    	</div>
+					{% else %}
+					<div class="col-md-6">
+						<input type="checkbox" name="permission" value="{{ permission.id }}"
+							onclick="user_list_util.change_user_permission(this, '{{user.id}}', 'permission', '{{ permission.id }}')"> 
+						<font title="{{ permission.name }}" id="{{user.id}}permission{{ permission.id }}">{{ permission.codename }}</font>
+					</div>
+					{% endif %}
+			    {% endfor %}
+			    {% endwith %}
+		    </div>
+		    
+		    <div class="col-md-5 col-lg-5">
+				<h4>{% trans 'Group' %}</h4>
+				{% with user_groups=user.groups.all %}
+				{% for group in groups %}
+					{% if group in user_groups %}
+					<div class="col-md-6 col-lg-6">
+						<input type="checkbox" name="group" value="{{ group.id }}" checked="checked"
+							onclick="user_list_util.change_user_permission(this, '{{user.id}}', 'group', '{{ group.id }}')">
+						<a href="{% url privilege.views.group.group_detail group.id 1 %}">
+							<font title="{{ group.name }}" color="green" id="{{user.id}}group{{ group.id }}">{{ group.name|truncatechars:8 }}</font>
+						</a>
+			    	</div>
+					{% else %}
+					<div class="col-md-6 col-lg-6">
+						<input type="checkbox" name="group" value="{{ group.id }}"
+							onclick="user_list_util.change_user_permission(this, '{{user.id}}', 'group', '{{ group.id }}')"> 
+						<a href="{% url privilege.views.group.group_detail group.id 1 %}">
+							<font title="{{ group.name }}" color="#333333" id="{{user.id}}group{{ group.id }}">{{ group.name|truncatechars:8 }}</font>
+						</a>
+					</div>
+					{% endif %}
+			    {% endfor %}
+			    {% endwith %}
+		    </div>
+		    
+		</div><!-- panel body -->
+	</div><!-- end panel-collapse -->
+
+</div>
+{% endfor %}
+</div>
+
+<div class="row" style="text-align: right;padding-right: 15px;">
+	{% pagination page url_prefix request %}
+</div>
+
+<script>
+var userhead = document.getElementsByName("userhead")[0];
+if (userhead) {
+    userhead.setAttribute("class", "panel-collapse collapse");
+}
+$(".collapse").collapse();
+
+
+var user_list_util = new Object();
+
+user_list_util.switch_super_user = function(obj, userid, url) {
+	$.ajax({
+		type: "GET",
+		url: url,
+		async: true,
+		success: function(response) {
+			if (response.status == "ok") {
+				if (response.current) {
+					$("#superusericon"+userid).show();
+					$(obj).html('<span class="glyphicon glyphicon-user"></span> UnRoot');
+				} else {
+					$("#superusericon"+userid).hide();
+					$(obj).html('<span class="glyphicon glyphicon-user"></span> Root');
+				}
+			}
+		},
+	});
+}
+
+user_list_util.switch_active = function (obj, userid, url) {
+	$.ajax({
+		type: "GET",
+		url: url,
+		async: true,
+		success: function(response) {
+			if (response.status == "ok") {
+				var user_img_obj = document.getElementById("user_is_active" + userid);
+				if (!response.current) {
+					obj.innerHTML = "<span class='glyphicon glyphicon-ok'></span> " + "{% trans 'Activate' %}";
+					user_img_obj.src = user_img_obj.src.replace("yes", "no");
+					obj.setAttribute("class", "btn btn-success btn-xs");
+				} else {
+					obj.innerHTML = "<span class='glyphicon glyphicon-ban-circle'></span> " + "{% trans 'Forbid' %}";
+					user_img_obj.src = user_img_obj.src.replace("no", "yes");
+					obj.setAttribute("class", "btn btn-warning btn-xs");
+				}
+			}
+		},
+	});
+}
+
+user_list_util.change_user_permission = function (clickedObj, userId, paramType, paramId) {
+	var domObj = document.getElementById(userId+paramType+paramId);
+	var change_group_url = "{% url privilege.views.user.change_user_permission %}";
+	var backupStatu = false;
+
+	if (clickedObj.checked) {
+		var data = {"user_id": userId, "param_id": paramId, "op_code": "add", "param_type": paramType};
+		var color = "green";
+		backupStatu = false;
+	} else {
+		var data = {"user_id": userId, "param_id": paramId, "op_code": "delete", "param_type": paramType};
+		var color = "#333333";
+		backupStatu = true;
+	}
+
+	$.ajax({
+		type: "POST",
+		url: change_group_url,
+		async: true,
+		data: data,
+		success: function(response) {
+			if (response.status == "ok") {
+				domObj.color = color;
+			} else {
+				clickedObj.checked = backupStatu;
+				alert(response.msg);
+			}
+		},
+	});
+	
+}
+</script>
+{% endblock %}
+
+
+{% block privilege_extra_js %}
+<script type="text/javascript" src="{% static 'js/privilege/privilege.js' %}"></script>
+{% endblock %}
