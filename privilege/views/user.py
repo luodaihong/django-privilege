@@ -89,14 +89,13 @@ def user_list(request, pageno=1, pagesize=PRIVILEGE_PAGE_SIZE):
     ]
 
     users = DjangoUser.objects.only("id", "username", "is_staff").all()
-    user_page = get_page(users, pageno, pagesize)
+    page = get_page(users, pageno, pagesize)
     groups = get_latest_groups()
     permissions = get_latest_permissions()
     url_prefix = reverse("privilege.views.user.user_list", args=(1, )).rstrip("/")[:-2]
 
-    return render_template("privilege/user_list.html", request, page=user_page, groups=groups,
-                           breadcrumb=breadcrumb, permissions=permissions, url_prefix=url_prefix,
-                           page_title=breadcrumb[-1]["name"], CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/user_list.html", page_title=breadcrumb[-1]["name"], 
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @render_json
@@ -166,9 +165,8 @@ def search(request, pageno=1, pagesize=PRIVILEGE_PAGE_SIZE):
         {"name": u"Search'%s'" % keyword}
     ]
 
-    return render_template(template, request, breadcrumb=breadcrumb, page=page, keyword=keyword,
-                           url_prefix=url_prefix, groups=groups, permissions=permissions, CURRENT_MENU=current_menu,
-                           page_title=breadcrumb[-1]["name"], LEFT_MENUS=LEFT_MENUS)
+    return render_template(page_title=breadcrumb[-1]["name"], CURRENT_MENU=current_menu,
+                           LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 def _get_keyword_source_url(request):
@@ -207,9 +205,8 @@ def add_user(request):
         {"name": _("User Center"), "url": user_list_url},
         {"name": _("Add User")}
     ]
-    return render_template("privilege/user_add.html", request, form=form, breadcrumb=breadcrumb,
-                           button=_("Add"), page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/user_add.html", button=_("Add"), page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @required_superuser
@@ -235,6 +232,5 @@ def reset_user_password(request, userid):
         {"name": _("User Center"), "url": user_list_url},
         {"name": _(u"Reset password")}
     ]
-    return render_template("privilege/user_add.html", request, form=form, breadcrumb=breadcrumb,
-                           button=_("Change"), page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/user_add.html", button=_("Change"), page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())

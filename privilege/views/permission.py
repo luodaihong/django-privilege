@@ -24,9 +24,8 @@ def permission_list(request):
                   ]
     permissions = get_latest_permissions()
 
-    return render_template("privilege/permission_list.html", request, breadcrumb=breadcrumb,
-                           permissions=permissions, page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/permission_list.html", page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @required_superuser
@@ -44,8 +43,8 @@ def add_permission(request):
                   {"name": _("Permission Center"), "url": reverse("privilege.views.permission.permission_list")},
                   {"name": _("Add Permission")},
                   ]
-    return render_template("privilege/permission_add.html", request, breadcrumb=breadcrumb, form=form, button=_("Add"),
-                           page_title=breadcrumb[-1]["name"], CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/permission_add.html", button=_("Add"), page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @required_superuser
@@ -79,6 +78,5 @@ def change_permission(request, pid):
                   {"name": _("Change Permission")},
                   ]
 
-    return render_template("privilege/permission_add.html", request, breadcrumb=breadcrumb, form=form,
-                           button=_("Change"), page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/permission_add.html", button=_("Change"), page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())

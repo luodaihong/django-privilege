@@ -30,13 +30,12 @@ def group_list(request, pageno=1, pagesize=PRIVILEGE_PAGE_SIZE):
         {'name': _("Group Center")}
     ]
     groups = get_latest_groups()
-    group_page = get_page(groups, pageno, pagesize)
+    page = get_page(groups, pageno, pagesize)
     permissions = get_latest_permissions()
     url_prefix = reverse("privilege.views.group.group_list", args=(1, )).rstrip("/")[:-2]
 
-    return render_template("privilege/group_list.html", request, page=group_page, breadcrumb=breadcrumb,
-                           permissions=permissions, url_prefix=url_prefix, page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/group_list.html", page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @required_superuser
@@ -44,7 +43,7 @@ def group_detail(request, groupid, page_no=1, page_size=60):
     try:
         group = Group.objects.get(id=groupid)
         django_users = DjangoUser.objects.only("id", "username").filter(groups=group)
-        user_page = get_page(django_users, page_no, page_size)
+        page = get_page(django_users, page_no, page_size)
     except ObjectDoesNotExist:
         raise Http404
 
@@ -57,9 +56,8 @@ def group_detail(request, groupid, page_no=1, page_size=60):
     url_prefix = reverse("privilege.views.group.group_detail", args=(groupid, page_no, )).rstrip("/")[:-2]
     permissions = get_latest_permissions()
 
-    return render_template("privilege/group_detail.html", request, group=group, breadcrumb=breadcrumb,
-                           permissions=permissions, page=user_page, url_prefix=url_prefix,
-                           page_title=breadcrumb[-1]["name"], CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/group_detail.html", page_title=breadcrumb[-1]["name"], 
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @render_json
@@ -110,9 +108,8 @@ def add_group(request):
         {'name': _("Add Group")}
     ]
 
-    return render_template("privilege/group_add.html", request, breadcrumb=breadcrumb,
-                           form=form, button=_("Add"), page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/group_add.html", button=_("Add"), page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @required_superuser
@@ -138,9 +135,8 @@ def edit_group(request, groupid):
         {'name': _("Change Group")},
     ]
 
-    return render_template("privilege/group_add.html", request, breadcrumb=breadcrumb,
-                           form=form, button=_("Change"), page_title=breadcrumb[-1]["name"],
-                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS)
+    return render_template("privilege/group_add.html", button=_("Change"), page_title=breadcrumb[-1]["name"],
+                           CURRENT_MENU=CURRENT_MENU, LEFT_MENUS=LEFT_MENUS, **locals())
 
 
 @required_superuser
