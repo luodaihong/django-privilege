@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>start.md</title>
+<title>README.md</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 body{
@@ -266,26 +266,58 @@ button::-moz-focus-inner {
 </style>
 </head>
 <body>
-<p><strong>1.Run Demo</strong>(strongly recommended)</p>
+<h1>django-privilege</h1>
+
+<p>A smart, simple django app to manage user,  group, permission easyly.</p>
+
+<h1>What can 'django-privilege' do for you?</h1>
+
+<p><code>django-privilege</code> is a django app, offering frequently-used permission mangement, include user, group, permission. It works on django build-in models, and supports South to migrate db data.</p>
+
+<p>You can CRUD group, permission and relationships between them. Also you can create user, reset his password, switch his active status and superuser status.All features are humanized.</p>
+
+<h1>How to install 'django-privilege'?</h1>
+
+<p><code>pip install https://github.com/luodaihong/django-privilege/archive/master.zip</code></p>
+
+<p>Tips:</p>
+
+<pre><code>You should run `syncdb` before `runserver` after add `django-privilege` into project.
+</code></pre>
+
+<h1>How to download 'django-privilege' source code?</h1>
+
+<p><code>git clone https://github.com/luodaihong/django-privilege</code></p>
+
+<h1>More config?</h1>
+
+<pre><code>You can set the following in your settings file.
+</code></pre>
 
 <ul>
-<li><p>change directory into 'example': cd django-privilege/example</p></li>
-<li><p>python manage.py runserver</p></li>
-<li><p>use browser to visit 'localhost:8000', you can see a full example there</p></li>
-<li><p>run tests: python manage.py test privilege</p></li>
+<li><p><code>PRIVILEGE_PAGE_SIZE</code></p>
+
+<p>How many users or groups will be displayed in one page? Default is 20.</p></li>
+<li><p><code>ACTIVE_WHEN_ADDED</code></p>
+
+<p>Specify whether an user's account will immediately be active after added from <code>django-privilege</code>. Default is True.</p>
+
+<p>If set False, the account added from <code>django-privilege</code> will not be able to login.</p></li>
+<li><p><code>SITE_NAME</code></p>
+
+<p>Set you site's name. Default is 'HomePage' in English, '首页' in Chinese.</p></li>
+<li><p><code>ACCESSIBLE_APPS</code></p>
+
+<p>specify which app's permissions will be managered in <code>django-privilege</code>? Default is <code>ACCESSIBLE_APPS = ["privilege"]</code> . You can append your other app_names into it.</p>
+
+<p>It is strongly recommended to keep "privilege" in the list, if that, <code>django-privilege</code> can offer a king of custom permission. We suggest you to have a try to use custom permission, enjoy it!</p></li>
 </ul>
 
-<p><strong>2.Full Document</strong></p>
+<h1>contribute to django-privilege</h1>
 
-<ul>
-<li>Please see 'README', everything is there</li>
-</ul>
+<p><a href="https://github.com/luodaihong/django-privilege" title="https://github.com/luodaihong/django-privilege">django-privilege@github</a></p>
 
-<p><strong>3.More Suggestions</strong></p>
-
-<ul>
-<li>email to <em>dev-web-sys@funshion.com</em></li>
-</ul>
+<p>Waiting for your code.</p>
 
 </body>
 </html>

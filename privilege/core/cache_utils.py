@@ -3,18 +3,13 @@
 from django.core.cache import cache
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.conf import settings
 
-from privilege.core.config import GROUP_CACHE_KEY, PERMISSION_CACHE_KEY
+from privilege.core.config import GROUP_CACHE_KEY, PERMISSION_CACHE_KEY, ACCESSIBLE_APPS
 
 
 __all__ = ["update_permissions", "get_latest_permissions", "update_groups", "get_latest_groups"]
 
 
-try:
-    ACCESSIBLE_APPS = settings.ACCESSIBLE_APPS
-except AttributeError:
-    ACCESSIBLE_APPS = ["privilege"]
 ACCESSIBLE_CONTENT_TYPES = ContentType.objects.filter(app_label__in=ACCESSIBLE_APPS)
 
 

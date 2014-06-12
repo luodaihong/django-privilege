@@ -15,12 +15,12 @@ LEFT_MENUS = [
 ]
 
 try:
-    PRIVILEGE_PAGE_SIZE = settings.PAGE_SIZE
+    PRIVILEGE_PAGE_SIZE = settings.PRIVILEGE_PAGE_SIZE
 except AttributeError:
     PRIVILEGE_PAGE_SIZE = 10
 
 try:
-    ACTIVE_WHEN_ADDED = settings.PAGE_SIZE
+    ACTIVE_WHEN_ADDED = settings.ACTIVE_WHEN_ADDED
 except AttributeError:
     ACTIVE_WHEN_ADDED = True
 
