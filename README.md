@@ -1,7 +1,7 @@
 django-privilege
 ================
 
-A smart, simple django app to manage user,  group, permission easyly.
+A smart, simple django app to manage user,  group, permission easily.
 
 # What can 'django-privilege' do for you? #
 `django-privilege` is a django app, offering frequently-used permission mangement, include user, group, permission. It works on django build-in models, and supports South to migrate db data.
@@ -13,7 +13,7 @@ You can CRUD group, permission and relationships between them. Also you can crea
 
 Tips:
 
-    You should run `syncdb` before `runserver` after add `django-privilege` into project.
+    You should run syncdb before runserver after add django-privilege into project.
 
 # How to download 'django-privilege' source code? #
 `git clone https://github.com/luodaihong/django-privilege`
