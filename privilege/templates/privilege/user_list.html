@@ -7,7 +7,7 @@
 {% block search %}
 <div class="row" style="text-align: right;padding-right: 15px;">
 	<div style="height: 40px;margin-bottom: 15px;vertical-align: bottom;display:inline-table;">
-		<form class="form-inline pull-right" role="form" method="post" action="{% url privilege.views.user.search 1 %}">
+		<form class="form-inline pull-right" role="form" method="post" action="{% url 'privilege.views.user.search' 1 %}">
 			<div class="input-group">
       			<input value="{{keyword}}" type="text" class="form-control" placeholder="{% trans 'enter user name' %}"
       				name="keyword" id="keyword" maxlength=15
@@ -18,7 +18,7 @@
      					<span class="glyphicon glyphicon-search"></span> {% trans 'Search' %}
      				</button>
      				
-     				<a class="btn btn-default" href="{% url privilege.views.user.add_user %}" style="margin-left: 15px;">
+     				<a class="btn btn-default" href="{% url 'privilege.views.user.add_user' %}" style="margin-left: 15px;">
 	      				<span class="glyphicon glyphicon-plus"></span> {% trans 'Add user' %}
 		  			</a>
    				</span>
@@ -62,14 +62,14 @@
 	    	<div class="col-md-4 col-lg-4" style="text-align: right;">
 	    		{% if user.id != request.user.id %}
 	    		<button class="btn btn-info btn-xs" type="button"
-		    		onclick="user_list_util.switch_super_user(this, '{{ user.id }}', '{% url privilege.views.user.switch_super_user user.id %}')">
+		    		onclick="user_list_util.switch_super_user(this, '{{ user.id }}', '{% url "privilege.views.user.switch_super_user" user.id %}')">
 		    		<span class="glyphicon glyphicon-user"></span> {% if user.is_superuser %}UnRoot{% else %}Root{% endif %}
 		    	</button>
 		    	{% endif %}
 
 		    	
 		    	<button class="btn btn-warning btn-xs" type="button"
-		    		onclick="user_list_util.switch_active(this, '{{ user.id }}', '{% url privilege.views.user.switch_active_user user.id %}')">
+		    		onclick="user_list_util.switch_active(this, '{{ user.id }}', '{% url "privilege.views.user.switch_active_user" user.id %}')">
 		    		{% if user.is_staff %}
 		    		<span class="glyphicon glyphicon-ban-circle"></span> {% trans 'Forbid' %}
 		    		{% else %}
@@ -77,7 +77,7 @@
 		    		{% endif %}
 		    	</button>
 
-		    	<a href="{% url privilege.views.user.reset_user_password user.id %}">
+		    	<a href="{% url 'privilege.views.user.reset_user_password' user.id %}">
 		    		<button class="btn btn-primary btn-xs" type="button">
 		    			<span class="glyphicon glyphicon-refresh"></span> {% trans 'reset password' %}
 		    		</button>
@@ -118,7 +118,7 @@
 					<div class="col-md-6 col-lg-6">
 						<input type="checkbox" name="group" value="{{ group.id }}" checked="checked"
 							onclick="user_list_util.change_user_permission(this, '{{user.id}}', 'group', '{{ group.id }}')">
-						<a href="{% url privilege.views.group.group_detail group.id 1 %}">
+						<a href="{% url 'privilege.views.group.group_detail' group.id 1 %}">
 							<font title="{{ group.name }}" color="green" id="{{user.id}}group{{ group.id }}">{{ group.name|truncatechars:8 }}</font>
 						</a>
 			    	</div>
@@ -126,7 +126,7 @@
 					<div class="col-md-6 col-lg-6">
 						<input type="checkbox" name="group" value="{{ group.id }}"
 							onclick="user_list_util.change_user_permission(this, '{{user.id}}', 'group', '{{ group.id }}')"> 
-						<a href="{% url privilege.views.group.group_detail group.id 1 %}">
+						<a href="{% url 'privilege.views.group.group_detail' group.id 1 %}">
 							<font title="{{ group.name }}" color="#333333" id="{{user.id}}group{{ group.id }}">{{ group.name|truncatechars:8 }}</font>
 						</a>
 					</div>
@@ -199,7 +199,7 @@ user_list_util.switch_active = function (obj, userid, url) {
 
 user_list_util.change_user_permission = function (clickedObj, userId, paramType, paramId) {
 	var domObj = document.getElementById(userId+paramType+paramId);
-	var change_group_url = "{% url privilege.views.user.change_user_permission %}";
+	var change_group_url = "{% url 'privilege.views.user.change_user_permission' %}";
 	var backupStatu = false;
 
 	if (clickedObj.checked) {

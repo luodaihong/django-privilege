@@ -5,7 +5,7 @@
 
 
 {% block privilege_content %}
-<form role="form" method="POST" id="form" action="{% url privilege.views.permission.delete_permissions %}">
+<form role="form" method="POST" id="form" action="{% url 'privilege.views.permission.delete_permissions' %}">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="row">
@@ -18,7 +18,7 @@
 					data-content="{% trans 'You have choosen nothing.' %}" data-placement="top" data-toggle="popover" data-container="body">
 						<span class="glyphicon glyphicon-remove"></span> {% trans "remove" %}
 					</button>
-					<a class="btn btn-primary btn-xs" href="{% url privilege.views.permission.add_permission %}">
+					<a class="btn btn-primary btn-xs" href="{% url 'privilege.views.permission.add_permission' %}">
 						<span class="glyphicon glyphicon-plus"></span> {% trans "add" %}
 					</a>
 				</div>
@@ -31,7 +31,7 @@
 				<div class="col-md-4 col-lg-4">
 					<input type="checkbox" name="permission" value="{{ permission.id }}"
 						onclick="permission_util.changeColor(this, '{{group.id}}{{ permission.id }}')">
-					<a href="{% url privilege.views.permission.change_permission permission.id %}">
+					<a href="{% url 'privilege.views.permission.change_permission' permission.id %}">
 						<font color="#333333" title="{{ permission.name }}" id="{{group.id}}{{ permission.id }}">
 							{{ permission.name|truncatechars:8 }}
 						</font>

@@ -19,7 +19,7 @@
 			var data = {"user_id": userid, "param_id": groupid, "op_code": "delete", "param_type": "group"};
 			$.ajax({
 				type: "POST",
-				url: "{% url privilege.views.user.change_user_permission %}",
+				url: "{% url 'privilege.views.user.change_user_permission' %}",
 				async: true,
 				data: data,
 				success: function(response) {

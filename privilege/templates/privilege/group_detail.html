@@ -10,14 +10,14 @@
 	<div class="panel-heading">
 		<div class="row">
 			<div class="col-md-4 col-lg-4">
-				{% trans "group name" %}：<a href="{% url privilege.views.group.group_detail group.id 1 %}">{{group.name}}</a>
+				{% trans "group name" %}：<a href="{% url 'privilege.views.group.group_detail' group.id 1 %}">{{group.name}}</a>
 			</div>
 			
 			<div class="col-md-8 col-lg-8" style="text-align: right;">
-				<a class="btn btn-warning btn-xs" href="{% url privilege.views.group.delete_group group.id %}">
+				<a class="btn btn-warning btn-xs" href="{% url 'privilege.views.group.delete_group' group.id %}">
 					<span class="glyphicon glyphicon-remove"></span> {% trans "delete" %}
 				</a>
-				<a class="btn btn-primary btn-xs" href="{% url privilege.views.group.edit_group group.id %}">
+				<a class="btn btn-primary btn-xs" href="{% url 'privilege.views.group.edit_group' group.id %}">
 					 <span class="glyphicon glyphicon-pencil"></span> {% trans "rename" %}
 				</a>
 			</div>
@@ -34,7 +34,7 @@
 					<div class="col-md-4 col-lg-4">
 						<input type="checkbox" name="permission" value="{{ permission.id }}" checked="checked"
 							onclick="privilegeGlobal.changeGroupPermission(this, '{{group.id}}', '{{ permission.id }}',
-								'{% url privilege.views.group.change_group_permission %}')">
+								'{% url "privilege.views.group.change_group_permission" %}')">
 						<font title="{{ permission.name }}" id="{{group.id}}{{ permission.id }}" color="green">
 							{{ permission.name|truncatechars:8 }}
 						</font>
@@ -43,7 +43,7 @@
 					<div class="col-md-4 col-lg-4">
 						<input type="checkbox" name="permission" value="{{ permission.id }}"
 							onclick="privilegeGlobal.changeGroupPermission(this, '{{group.id}}', '{{ permission.id }}',
-								'{% url privilege.views.group.change_group_permission %}')">
+								'{% url "privilege.views.group.change_group_permission" %}')">
 						<font title="{{ permission.name }}" id="{{group.id}}{{ permission.id }}">
 							{{ permission.name|truncatechars:8 }}
 						</font>
@@ -88,7 +88,7 @@ group_detail_util.removeFromGroup = function (userid, groupid) {
 	var data = {"user_id": userid, "param_id": groupid, "op_code": "delete", "param_type": "group"};
 	$.ajax({
 		type: "POST",
-		url: "{% url privilege.views.user.change_user_permission %}",
+		url: "{% url 'privilege.views.user.change_user_permission' %}",
 		async: true,
 		data: data,
 		success: function(response) {
